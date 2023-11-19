@@ -1,6 +1,8 @@
 package com.finda.service;
 
+import com.finda.model.Dupa;
 import com.finda.model.User;
+import com.finda.repository.DupaRepository;
 import com.finda.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +15,27 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private DupaRepository dupaRepository;
+
     // Create a new user
     public User createUser(User user) {
         return userRepository.save(user);
     }
 
+
+    public Dupa createDupa(Dupa dupa) {
+        return dupaRepository.save(dupa);
+    }
+
+
     // Get all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<Dupa> getAllDupy() {
+        return dupaRepository.findAll();
     }
 
     // Get user by ID
@@ -48,6 +63,10 @@ public class UserService {
     // Delete user
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public Optional<Dupa> getDupaById(Long id) {
+        return dupaRepository.findById(id);
     }
 
     // Other business logic related to users

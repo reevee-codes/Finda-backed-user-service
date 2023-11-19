@@ -1,4 +1,5 @@
 package com.finda.controller;
+import com.finda.model.Dupa;
 import com.finda.model.User;
 import com.finda.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -28,10 +29,21 @@ public class UserController {
         return userService.createUser(user);
     }
 
+    @PostMapping("/dupa")
+    public @ResponseBody Dupa createDupa(@RequestBody Dupa dupa) {
+        userService.createDupa(dupa);
+        return dupa;
+    }
+
     // Get all users
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/dupa")
+    public Dupa getAllDupy() {
+        return new Dupa();
     }
 
     // Get user by ID
@@ -39,6 +51,8 @@ public class UserController {
     public Optional<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
+
+
 
     // Update user by ID
     @PutMapping("/{id}")
