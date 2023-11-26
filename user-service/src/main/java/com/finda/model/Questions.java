@@ -3,11 +3,14 @@ package com.finda.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "questionarries")
-public class Questionnaire {
+@Table(name = "questions")
+public class Questions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
 
     private String gender;
     private String pytanie1;
@@ -34,5 +37,14 @@ public class Questionnaire {
 
     public void setPytanie1(String pytanie1) {
         this.pytanie1 = pytanie1;
+
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

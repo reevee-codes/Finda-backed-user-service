@@ -1,12 +1,15 @@
 package com.finda.controller;
-import com.finda.model.Dupa;
+
+import com.finda.model.Questions;
 import com.finda.model.User;
+import com.finda.service.QuestionsService;
 import com.finda.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +22,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private QuestionsService questionsService;
+
+
     @ApiOperation("create user")
     @ApiResponses(value = {@ApiResponse(code = SC_OK, message = "ok"),
             @ApiResponse(code = SC_BAD_REQUEST, message = "An unexpected error occurred")})
@@ -26,14 +33,15 @@ public class UserController {
             message = "created a new user")
     @PostMapping
     public User createUser(@RequestBody User user) {
+        Questions newQuestions = new Questions();
+        user.setQuestions(newQuestions);
+
+
+        questionsService.createNewQuestions(newQuestions);
+
         return userService.createUser(user);
     }
 
-    @PostMapping("/dupa")
-    public @ResponseBody Dupa createDupa(@RequestBody Dupa dupa) {
-        userService.createDupa(dupa);
-        return dupa;
-    }
 
     // Get all users
     @GetMapping
@@ -41,17 +49,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/dupa")
-    public Dupa getAllDupy() {
-        return new Dupa();
-    }
-
     // Get user by ID
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
-
 
 
     // Update user by ID
