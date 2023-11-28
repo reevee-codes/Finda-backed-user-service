@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +20,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/v1/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -26,24 +29,25 @@ public class UserController {
     private QuestionsService questionsService;
 
 
-    @ApiOperation("create user")
-    @ApiResponses(value = {@ApiResponse(code = SC_OK, message = "ok"),
-            @ApiResponse(code = SC_BAD_REQUEST, message = "An unexpected error occurred")})
-    @ApiResponse(code = 200,
-            message = "created a new user")
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        Questions newQuestions = new Questions();
-        user.setQuestions(newQuestions);
-
-
-        questionsService.createNewQuestions(newQuestions);
-
-        return userService.createUser(user);
-    }
+//    @ApiOperation("create user")
+//    @ApiResponses(value = {@ApiResponse(code = SC_OK, message = "ok"),
+//            @ApiResponse(code = SC_BAD_REQUEST, message = "An unexpected error occurred")})
+//    @ApiResponse(code = 200,
+//            message = "created a new user")
+//    @PostMapping
+//    public User createUser(@RequestBody User user) {
+//        Questions newQuestions = new Questions();
+//        user.setQuestions(newQuestions);
+//
+//
+//        questionsService.createNewQuestions(newQuestions);
+//
+//        return userService.createUser(user);
+//    }
 
 
     // Get all users
+    @Secured("OWNER")
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -53,6 +57,13 @@ public class UserController {
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
+    }
+
+
+    //TODO ADMIN moze zmienic dostep dla usera po mailu
+    @GetMapping("/email")
+    public UserDetails getUserByEmail(@PathVariable String email) {
+        return userService.loadUserByUsername(email);
     }
 
 

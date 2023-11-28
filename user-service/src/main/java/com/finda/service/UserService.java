@@ -17,11 +17,6 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
 
-    // Create a new user
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
     // Get all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
